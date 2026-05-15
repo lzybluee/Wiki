@@ -1,7 +1,7 @@
 backrooms_wiki_zh_all_2024-12.zim
 bindingofisaacrebirth_en_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-07 14:16', '124M')
 gutenberg_zh_all_2025-12.zim => Already latest: ('2025-12', '2025-12-08 20:44', '301M')
-minecraftwiki_en_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-02-04 06:01', '1.1G')
+minecraftwiki_en_all_maxi_2026-05.zim => Already latest: ('2026-05', '2026-05-05 08:40', '1.2G')
 scp-wiki-cn_zh_2026-01.zim
 vikidia_en_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-12 14:02', '70M')
 wikibooks_en_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-28 04:08', '5.8G')
@@ -12,7 +12,7 @@ wikinews_en_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-14 22:5
 wikinews_zh_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-15 04:47', '244M')
 wikipedia_en_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-02-26 02:08', '115G')
 wikipedia_en_for_schools_maxi_2024-08.zim
-wikipedia_en_simple_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-02-09 21:19', '3.2G')
+wikipedia_en_simple_all_maxi_2026-05.zim => Already latest: ('2026-05', '2026-05-10 20:40', '3.2G')
 wikipedia_lzh_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-18 04:00', '125M')
 wikipedia_zh_all_maxi_2025-09.zim => Already latest: ('2025-09', '2025-09-16 13:05', '24G')
 wikiquote_en_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-14 11:51', '944M')
@@ -20,7 +20,7 @@ wikiquote_zh_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-21 15:
 wikisource_en_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-02-15 04:44', '18G')
 wikisource_zh_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-03-01 23:55', '12G')
 wikispecies_en_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-10 08:39', '3.2G')
-wikiversity_en_all_maxi_2026-02.zim => Already latest: ('2026-02', '2026-02-05 10:42', '2.2G')
+wikiversity_en_all_maxi_2026-05.zim => Already latest: ('2026-05', '2026-05-06 11:36', '2.3G')
 wikiversity_zh_all_maxi_2026-04.zim => Already latest: ('2026-04', '2026-04-15 00:46', '600M')
 wikivoyage_en_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-17 21:17', '1.0G')
 wikivoyage_zh_all_maxi_2026-03.zim => Already latest: ('2026-03', '2026-03-21 07:57', '114M')
