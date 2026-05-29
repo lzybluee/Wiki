@@ -1,2 +1,2 @@
-py update_zim.py
+python update_zim.py
 pause

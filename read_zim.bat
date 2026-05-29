@@ -1,2 +1,2 @@
-py read_zim.py
+python read_zim.py
 pause
