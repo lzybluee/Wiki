@@ -14,27 +14,27 @@
 
     // Your code here...
 
-    if (window.self === window.top) {
-        const url = window.location;
-        if (!url.pathname.startsWith( '/content/')) return;
+    const url = window.location;
 
+    if (url.pathname.startsWith( '/content/') && window.self === window.top) {
         const redirect_url = url.origin + '/viewer#' + url.pathname.slice('/content/'.length);
-        console.log('Redirect to', redirect_url)
+        console.log('Redirect to:', redirect_url);
         url.replace(redirect_url);
-    }
-
-    if (document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const url = window.location;
-        if (!url.pathname.startsWith( '/content/')) return;
-
+    } else if (url.pathname.startsWith( '/content/') && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
         const path = url.pathname.slice('/content/'.length);
         const index = path.indexOf( '/');
         const bookname = path.slice(0, index);
         const pattern = path.slice(index + 1);
-
         const search_url = url.origin + '/search?books.name=' + bookname + "&pattern=" + pattern;
-        console.log('Search url', search_url)
+
+        window.top.new_title = 'Search: ' + decodeURIComponent(pattern);
+        window.top.document.title = window.top.new_title;
+
+        console.log('Search url:', search_url);
         url.replace(search_url);
+    } else if (url.pathname === '/search' && window.self !== window.top) {
+        console.log('Title:', document.title);
+        window.top.document.title = window.top.new_title;
     }
 
     function link2wiki() {
