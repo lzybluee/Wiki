@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         Online Wiki
-// @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  Press title text or 'w' key will link to online page
-// @author       You
+// @name         Kiwix
+// @namespace    https://github.com/lzybluee/Wiki
+// @version      3.0
+// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Press title text or 'w' key will link to online page.
+// @author       Lzy
 // @match        *://127.0.0.1:8080/*
+// @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
@@ -12,6 +13,30 @@
     'use strict';
 
     // Your code here...
+
+    if (window.self === window.top) {
+        const url = window.location;
+        if (!url.pathname.startsWith( '/content/')) return;
+
+        const redirect_url = url.origin + '/viewer#' + url.pathname.slice('/content/'.length);
+        console.log('Redirect to', redirect_url)
+        url.replace(redirect_url);
+    }
+
+    if (document.querySelector(`meta[name='viewport']`) && !document.querySelector(`link[rel='canonical']`)) {
+        const url = window.location;
+        if (!url.pathname.startsWith( '/content/')) return;
+
+        const path = url.pathname.slice('/content/'.length);
+        const index = path.indexOf( '/');
+        const bookname = path.slice(0, index);
+        const pattern = path.slice(index + 1);
+
+        const search_url = url.origin + '/search?books.name=' + bookname + "&pattern=" + pattern;
+        console.log('Search url', search_url)
+        url.replace(search_url);
+    }
+
     function link2wiki() {
         window.open(document.querySelector(`link[rel='canonical']`).href);
     };
