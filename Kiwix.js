@@ -5,7 +5,6 @@
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Press title text or 'w' key will link to online page.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
-// @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
@@ -32,8 +31,15 @@
 
         console.log('Search url:', search_url);
         url.replace(search_url);
+    } else if (url.pathname.startsWith( '/content/') && window.self !== window.top) {
+        const path = url.pathname.slice('/content/'.length);
+        const index = path.indexOf( '/');
+        const pattern = path.slice(index + 1);
+
+        if (!window.top.document.title) {
+            window.top.document.title = decodeURIComponent(pattern);
+        }
     } else if (url.pathname === '/search' && window.self !== window.top) {
-        console.log('Title:', document.title);
         window.top.document.title = window.top.new_title;
     }
 
