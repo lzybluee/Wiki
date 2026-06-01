@@ -23,7 +23,7 @@
         url.replace(redirect_url);
     }
 
-    if (document.querySelector(`meta[name='viewport']`) && !document.querySelector(`link[rel='canonical']`)) {
+    if (document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
         const url = window.location;
         if (!url.pathname.startsWith( '/content/')) return;
 
