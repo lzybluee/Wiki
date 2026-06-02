@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      3.0
+// @version      3.1
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Press title text or 'w' key will link to online page.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
@@ -14,33 +14,21 @@
     // Your code here...
 
     const url = window.location;
+    let match = null;
 
-    if (url.pathname.startsWith( '/content/') && window.self === window.top) {
-        const redirect_url = url.origin + '/viewer#' + url.pathname.slice('/content/'.length);
+    if ((match = url.pathname.match(/^\/content\/(.*)$/)) && window.self === window.top) {
+        const redirect_url = url.origin + '/viewer#' + match[1];
         console.log('Redirect to:', redirect_url);
         url.replace(redirect_url);
-    } else if (url.pathname.startsWith( '/content/') && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const path = url.pathname.slice('/content/'.length);
-        const index = path.indexOf( '/');
-        const bookname = path.slice(0, index);
-        const pattern = path.slice(index + 1);
-        const search_url = url.origin + '/search?books.name=' + bookname + "&pattern=" + pattern;
-
-        window.top.new_title = 'Search: ' + decodeURIComponent(pattern);
-        window.top.document.title = window.top.new_title;
-
+    } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
+        const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
+        window.top.document.title = 'Search: ' + decodeURIComponent(match[2]);
         console.log('Search url:', search_url);
         url.replace(search_url);
-    } else if (url.pathname.startsWith( '/content/') && window.self !== window.top) {
-        const path = url.pathname.slice('/content/'.length);
-        const index = path.indexOf( '/');
-        const pattern = path.slice(index + 1);
-
-        if (!window.top.document.title) {
-            window.top.document.title = decodeURIComponent(pattern);
-        }
+    } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && window.self !== window.top) {
+        window.top.document.title = decodeURIComponent(match[2]);
     } else if (url.pathname === '/search' && window.self !== window.top) {
-        window.top.document.title = window.top.new_title;
+        window.top.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
     }
 
     function link2wiki() {
