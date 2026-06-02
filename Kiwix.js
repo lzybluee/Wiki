@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      3.1
+// @version      3.2
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Press title text or 'w' key will link to online page.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
@@ -27,7 +27,7 @@
             console.log('Search url:', search_url);
             url.replace(search_url);
         } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && window.self !== window.top) {
-            window.top.document.title = decodeURIComponent(match[2]);
+            window.top.document.title = decodeURIComponent(match[2]) + (url.hash ? ' - ' + decodeURIComponent(url.hash.slice(1)) : '');
         } else if (url.pathname === '/search' && window.self !== window.top) {
             window.top.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
         }
