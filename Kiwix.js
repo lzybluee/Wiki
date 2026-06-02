@@ -16,19 +16,21 @@
     const url = window.location;
     let match = null;
 
-    if ((match = url.pathname.match(/^\/content\/(.*)$/)) && window.self === window.top) {
-        const redirect_url = url.origin + '/viewer#' + match[1];
-        console.log('Redirect to:', redirect_url);
-        url.replace(redirect_url);
-    } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
-        window.top.document.title = 'Search: ' + decodeURIComponent(match[2]);
-        console.log('Search url:', search_url);
-        url.replace(search_url);
-    } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && window.self !== window.top) {
-        window.top.document.title = decodeURIComponent(match[2]);
-    } else if (url.pathname === '/search' && window.self !== window.top) {
-        window.top.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
+    if (url.href.includes('wikipedia_zh_all_maxi_')) {
+        if ((match = url.pathname.match(/^\/content\/(.*)$/)) && window.self === window.top) {
+            const redirect_url = url.origin + '/viewer#' + match[1];
+            console.log('Redirect to:', redirect_url);
+            url.replace(redirect_url);
+        } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
+            const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
+            window.top.document.title = 'Search: ' + decodeURIComponent(match[2]);
+            console.log('Search url:', search_url);
+            url.replace(search_url);
+        } else if ((match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && window.self !== window.top) {
+            window.top.document.title = decodeURIComponent(match[2]);
+        } else if (url.pathname === '/search' && window.self !== window.top) {
+            window.top.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
+        }
     }
 
     function link2wiki() {
