@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      3.6
-// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Press title text or 'w' key will link to online page.
+// @version      6.0
+// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
 // @grant        none
@@ -11,47 +11,48 @@
 (function() {
     'use strict';
 
-    // Your code here...
-
+    const top_window = window.top;
     const url = window.location;
+    let source_ele = null;
     let match = null;
 
-    if (window.self === window.top && (match = url.pathname.match(/^\/content\/(.*)$/))) {
-        const redirect_url = url.origin + '/viewer#' + match[1];
-        console.log('Redirect to:', redirect_url);
-        url.replace(redirect_url);
-    } else if (window.parent === window.top && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
-        window.top.document.title = 'Search: ' + decodeURIComponent(match[2]);
-        console.log('Search url:', search_url);
-        url.replace(search_url);
-    } else if (window.parent === window.top && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/))) {
-        window.top.document.title = document.title + (url.hash ? (' - ' + decodeURIComponent(url.hash.slice(1)).replaceAll('_', ' ')) : '');
-    } else if (window.parent === window.top && url.pathname === '/search') {
-        window.top.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
-    }
-
-    function link2wiki() {
-        window.open(document.querySelector(`link[rel='canonical']`).href);
-    };
-
-    let title_element = document.getElementById('firstHeading');
-
-    if (!title_element) {
-        for (const name of ['article-header', 'pcs-edit-section-title']) {
-            const list = document.getElementsByClassName(name);
-            if (list.length) {
-                title_element = list[0];
-                break;
-            }
+    if (window.self !== top_window && window.parent === top_window) {
+        source_ele = top_window.document.getElementById('source_page_button');
+        const random_ele = top_window.document.getElementById('kiwix_serve_taskbar_random_button');
+        if (!source_ele && random_ele) {
+            source_ele = top_window.document.createElement('a');
+            source_ele.id = 'source_page_button';
+            source_ele.title = 'Go to source page';
+            source_ele.target = '_blank';
+            const source_btn = top_window.document.createElement('button');
+            source_btn.textContent = '🌐';
+            source_ele.appendChild(source_btn);
+            random_ele.after(source_ele);
         }
     }
 
-    title_element?.addEventListener('click', function(event) {
-        if (window.getSelection().toString().length == 0) link2wiki();
-    });
+    if (window.self === top_window && (match = url.pathname.match(/^\/content\/(.*)$/))) {
+        const redirect_url = url.origin + '/viewer#' + match[1];
+        console.log('Redirect to:', redirect_url);
+        url.replace(redirect_url);
+    } else if (window.parent === top_window && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
+        const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
+        top_window.document.title = 'Search: ' + decodeURIComponent(match[2]);
+        source_ele.style.display = 'none';
+        console.log('Search url:', search_url);
+        url.replace(search_url);
+    } else if (window.parent === top_window && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/))) {
+        top_window.document.title = document.title + (url.hash ? (' - ' + decodeURIComponent(url.hash.slice(1)).replaceAll('_', ' ')) : '');
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'w' || event.key === 'W') link2wiki();
-    });
+        const source_url = document.querySelector(`link[rel='canonical']`)?.href;
+        if (source_url) {
+            source_ele.style.display = '';
+            source_ele.href = source_url;
+        } else {
+            source_ele.style.display = 'none';
+        }
+    } else if (window.parent === top_window && url.pathname === '/search') {
+        top_window.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
+        source_ele.style.display = 'none';
+    }
 })();
