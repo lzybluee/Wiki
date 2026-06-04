@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      6.0
+// @version      6.6
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
@@ -47,7 +47,7 @@
         const source_url = document.querySelector(`link[rel='canonical']`)?.href;
         if (source_url) {
             source_ele.style.display = '';
-            source_ele.href = source_url;
+            source_ele.href = source_url + url.hash;
         } else {
             source_ele.style.display = 'none';
         }
