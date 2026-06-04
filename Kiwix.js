@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      6.6
+// @version      6.6.6
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button.
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
@@ -24,6 +24,7 @@
             source_ele.id = 'source_page_button';
             source_ele.title = 'Go to source page';
             source_ele.target = '_blank';
+            source_ele.style.marginLeft = '20px';
             const source_btn = top_window.document.createElement('button');
             source_btn.textContent = '🌐';
             source_ele.appendChild(source_btn);
