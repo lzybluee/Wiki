@@ -13,10 +13,11 @@
 
     const top_window = window.top;
     const url = window.location;
+    const is_frame = window.self !== top_window && window.parent === top_window;
     let source_ele = null;
     let match = null;
 
-    if (window.self !== top_window && window.parent === top_window) {
+    if (is_frame) {
         source_ele = top_window.document.getElementById('source_page_button');
         const random_ele = top_window.document.getElementById('kiwix_serve_taskbar_random_button');
         if (!source_ele && random_ele) {
@@ -36,13 +37,13 @@
         const redirect_url = url.origin + '/viewer#' + match[1];
         console.log('Redirect to:', redirect_url);
         url.replace(redirect_url);
-    } else if (window.parent === top_window && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
+    } else if (is_frame && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
         const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
         top_window.document.title = 'Search: ' + decodeURIComponent(match[2]);
         source_ele.style.display = 'none';
         console.log('Search url:', search_url);
         url.replace(search_url);
-    } else if (window.parent === top_window && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/))) {
+    } else if (is_frame && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/))) {
         top_window.document.title = document.title + (url.hash ? (' - ' + decodeURIComponent(url.hash.slice(1)).replaceAll('_', ' ')) : '');
 
         const source_url = document.querySelector(`link[rel='canonical']`)?.href;
@@ -52,7 +53,7 @@
         } else {
             source_ele.style.display = 'none';
         }
-    } else if (window.parent === top_window && url.pathname === '/search') {
+    } else if (is_frame && url.pathname === '/search') {
         top_window.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
         source_ele.style.display = 'none';
     }
