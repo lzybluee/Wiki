@@ -14,8 +14,8 @@
     const top_window = window.top;
     const url = window.location;
     const is_frame = window.self !== top_window && window.parent === top_window;
+    const matcher = url.pathname.match(/^\/content\/(.*?)\/(.*)$/);
     let source_ele = null;
-    let match = null;
 
     if (is_frame) {
         source_ele = top_window.document.getElementById('source_page_button');
@@ -33,17 +33,17 @@
         }
     }
 
-    if (window.self === top_window && (match = url.pathname.match(/^\/content\/(.*)$/))) {
-        const redirect_url = url.origin + '/viewer#' + match[1];
+    if (window.self === top_window && matcher) {
+        const redirect_url = url.origin + '/viewer#' + matcher[1] + '/' + matcher[2];
         console.log('Redirect to:', redirect_url);
         url.replace(redirect_url);
-    } else if (is_frame && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/)) && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const search_url = url.origin + '/search?books.name=' + match[1] + "&pattern=" + match[2];
-        top_window.document.title = 'Search: ' + decodeURIComponent(match[2]);
+    } else if (is_frame && matcher && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
+        const search_url = url.origin + '/search?books.name=' + matcher[1] + "&pattern=" + matcher[2];
+        top_window.document.title = 'Search: ' + decodeURIComponent(matcher[2]);
         source_ele.style.display = 'none';
         console.log('Search url:', search_url);
         url.replace(search_url);
-    } else if (is_frame && (match = url.pathname.match(/^\/content\/(.*?)\/(.*)$/))) {
+    } else if (is_frame && matcher) {
         top_window.document.title = document.title + (url.hash ? (' - ' + decodeURIComponent(url.hash.slice(1)).replaceAll('_', ' ')) : '');
 
         const source_url = document.querySelector(`link[rel='canonical']`)?.href;
