@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      6.6.6
-// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button.
+// @version      6.9
+// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button. 4. Auto-redirect http-equiv url (Firefox accessibility.blockautorefresh=true)
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
 // @grant        none
@@ -16,6 +16,7 @@
     const is_frame = window.self !== top_window && window.parent === top_window;
     const matcher = url.pathname.match(/^\/content\/(.*?)\/(.*)$/);
     let source_ele = null;
+    let query = null;
 
     if (is_frame) {
         source_ele = top_window.document.getElementById('source_page_button');
@@ -35,12 +36,17 @@
 
     if (window.self === top_window && matcher) {
         const redirect_url = url.origin + '/viewer#' + matcher[1] + '/' + matcher[2];
-        console.log('Redirect to:', redirect_url);
+        console.log('Redirect url:', redirect_url);
         url.replace(redirect_url);
+    } else if (is_frame && matcher && (query = document.querySelector(`meta[http-equiv='refresh']`))) {
+        const refresh_url = query.getAttribute('content').match(/^\d+;URL='\.\/(.*)'$/)[1];
+        console.log('Refresh url:', refresh_url);
+        url.replace(refresh_url);
     } else if (is_frame && matcher && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
-        const search_url = url.origin + '/search?books.name=' + matcher[1] + "&pattern=" + matcher[2];
         top_window.document.title = 'Search: ' + decodeURIComponent(matcher[2]);
         source_ele.style.display = 'none';
+
+        const search_url = url.origin + '/search?books.name=' + matcher[1] + "&pattern=" + matcher[2];
         console.log('Search url:', search_url);
         url.replace(search_url);
     } else if (is_frame && matcher) {
@@ -54,7 +60,7 @@
             source_ele.style.display = 'none';
         }
     } else if (is_frame && url.pathname === '/search') {
-        top_window.document.title = 'Search: ' + new URL(url.href).searchParams.get('pattern');
+        top_window.document.title = 'Search: ' + new URLSearchParams(url.search).get('pattern');
         source_ele.style.display = 'none';
     }
 })();
