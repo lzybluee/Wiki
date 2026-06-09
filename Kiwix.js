@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      6.9
+// @version      6.9.1
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button. 4. Auto-redirect http-equiv url (Firefox accessibility.blockautorefresh=true)
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
@@ -15,8 +15,8 @@
     const url = window.location;
     const is_frame = window.self !== top_window && window.parent === top_window;
     const matcher = url.pathname.match(/^\/content\/(.*?)\/(.*)$/);
+    const refresh = document.querySelector(`meta[http-equiv='refresh']`);
     let source_ele = null;
-    let query = null;
 
     if (is_frame) {
         source_ele = top_window.document.getElementById('source_page_button');
@@ -35,11 +35,13 @@
     }
 
     if (window.self === top_window && matcher) {
+        if (refresh) top_window.document.title = decodeURIComponent(matcher[2]).replaceAll('_', ' ');
+
         const redirect_url = url.origin + '/viewer#' + matcher[1] + '/' + matcher[2];
         console.log('Redirect url:', redirect_url);
         url.replace(redirect_url);
-    } else if (is_frame && matcher && (query = document.querySelector(`meta[http-equiv='refresh']`))) {
-        const refresh_url = query.getAttribute('content').match(/^\d+;URL='\.\/(.*)'$/)[1];
+    } else if (is_frame && matcher && refresh) {
+        const refresh_url = refresh.getAttribute('content').match(/^\d+;URL='\.\/(.*)'$/)[1];
         console.log('Refresh url:', refresh_url);
         url.replace(refresh_url);
     } else if (is_frame && matcher && document.title === 'Page not found' && !document.querySelector(`link[rel='canonical']`)) {
