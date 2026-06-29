@@ -62,7 +62,7 @@ def main():
     download = []
     for path in os.listdir(WIKI_FOLDER):
         if path.endswith('.zim'):
-            if (path.startswith('wikihow') or path.startswith('wikipedia_en_for_schools')
+            if (path.startswith('wikihow') or path.startswith('wikinews') or path.startswith('wikipedia_en_for_schools')
                     or path.startswith('scp') or path.startswith('backrooms')):
                 print(path)
             else:
