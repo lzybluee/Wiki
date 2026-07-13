@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      2026.06.10
+// @version      2026.07.13
 // @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button. 4. Auto-redirect http-equiv url (Firefox accessibility.blockautorefresh=true)
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
+// @exclude      *://127.0.0.1:8080/*/_assets_/*
 // @grant        none
 // ==/UserScript==
 
