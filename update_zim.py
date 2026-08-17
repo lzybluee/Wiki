@@ -65,6 +65,9 @@ def main():
             if (path.startswith('wikihow') or path.startswith('wikinews') or path.startswith('wikipedia_en_for_schools')
                     or path.startswith('scp') or path.startswith('backrooms')):
                 print(path)
+            elif 'minecraft' in path:
+                # Skip
+                print(path)
             else:
                 if zim := check_zim(path):
                     download.append(zim)
