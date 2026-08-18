@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Kiwix
 // @namespace    https://github.com/lzybluee/Wiki
-// @version      2026.07.13
-// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button. 4. Auto-redirect http-equiv url (Firefox accessibility.blockautorefresh=true)
+// @version      2026.08.18
+// @description  1. Redirect content url to viewer url. 2. Redirect 404 page to search url. 3. Add source page button. 4. Auto-redirect http-equiv url (Firefox accessibility.blockautorefresh=true) 5. Fix url of multi-page categories
 // @author       Lzy
 // @match        *://127.0.0.1:8080/*
 // @exclude      *://127.0.0.1:8080/*/_assets_/*
@@ -61,6 +61,21 @@
             source_ele.href = source_url + url.hash;
         } else {
             source_ele.style.display = 'none';
+        }
+
+        if(decodeURIComponent(matcher[2]).startsWith('Category:')) {
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.mw-category-group').forEach(group => {
+                    group.querySelectorAll(`a[target='_parent']`).forEach(a => {
+                        a.href = a.href.replace('/content/', '/viewer#');
+                    });
+                });
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
         }
     } else if (is_frame && url.pathname === '/search') {
         top_window.document.title = 'Search: ' + new URLSearchParams(url.search).get('pattern');
