@@ -4,6 +4,10 @@ import re
 import requests
 
 WIKI_FOLDER = '.'
+PROXIES = {
+    'http': 'http://127.0.0.1:8118',
+    'https': 'http://127.0.0.1:8118'
+}
 
 
 def compare_timestamp(t1, t2):
@@ -26,7 +30,7 @@ def check_zim(path):
 
     while True:
         try:
-            page = requests.get(url, timeout=10)
+            page = requests.get(url, timeout=10, proxies=PROXIES)
             break
         except Exception:
             continue

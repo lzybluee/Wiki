@@ -24,7 +24,7 @@ wikiversity_en_all_maxi_2026-05.zim => Already latest: ('2026-05', '2026-05-06 1
 wikiversity_zh_all_maxi_2026-07.zim => Already latest: ('2026-07', '2026-07-17 04:16', '604M')
 wikivoyage_en_all_maxi_2026-06.zim => Already latest: ('2026-06', '2026-06-15 22:05', '1.1G')
 wikivoyage_zh_all_maxi_2026-06.zim => Already latest: ('2026-06', '2026-06-19 08:21', '114M')
-wiktionary_en_all_nopic_2026-05.zim => Already latest: ('2026-05', '2026-05-16 13:32', '8.5G')
+wiktionary_en_all_nopic_2026-08.zim => Already latest: ('2026-08', '2026-08-21 16:45', '8.5G')
 wiktionary_en_simple_all_nopic_2026-04.zim => Already latest: ('2026-04', '2026-04-15 05:36', '25M')
 wiktionary_zh_all_nopic_2025-04.zim => Already latest: ('2025-04', '2025-04-03 08:26', '1.6G')
 zh.minecraft.wiki_zh_all_2026-03.zim
